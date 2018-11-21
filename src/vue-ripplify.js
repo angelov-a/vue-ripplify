@@ -10,7 +10,9 @@ import {
 
 var Ripplify = {
     bind(el, binding) {
-        if (!binding.value.isDisabled) {
+        var value = binding.value || {}
+
+        if (!value.isDisabled) {
             init(el, binding)
         }
     },
@@ -18,17 +20,20 @@ var Ripplify = {
     // Checks if any ripple settings have been updated and if needed either
     // turns the ripple effect on/off or reinitializes it
     update(el, binding) {
-        if (binding.value.isDisabled !== binding.oldValue.isDisabled) {
-            if (!binding.value.isDisabled) {
+        var value = binding.value || {},
+            oldValue = binding.oldValue || {}
+
+        if (value.isDisabled !== oldValue.isDisabled) {
+            if (!value.isDisabled) {
                 init(el, binding)
             } else {
                 destroy(el)
             }
         } else if (
-            binding.value.isUnbounded !== binding.oldValue.isUnbounded ||
-            binding.value.duration !== binding.oldValue.duration ||
-            binding.value.color !== binding.oldValue.color ||
-            binding.value.zIndex !== binding.oldValue.zIndex
+            value.isUnbounded !== oldValue.isUnbounded ||
+            value.duration !== oldValue.duration ||
+            value.color !== oldValue.color ||
+            value.zIndex !== oldValue.zIndex
         ) {
             destroy(el)
             init(el, binding)

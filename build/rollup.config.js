@@ -1,4 +1,6 @@
 import { terser } from "rollup-plugin-terser"
+import postcss from 'rollup-plugin-postcss'
+import autoprefixer from 'autoprefixer'
 
 export default {
     input: 'src/wrapper.js',
@@ -8,5 +10,11 @@ export default {
         exports: 'named',
     },
     
-    plugins: [terser()],
+    plugins: [
+        postcss({
+            plugins: [autoprefixer()],
+            minimize: true
+        }),
+        terser()
+    ],
 }

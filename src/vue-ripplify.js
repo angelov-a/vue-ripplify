@@ -8,6 +8,8 @@ import {
     SCALE_INITIAL
 } from './constants'
 
+import './style.css'
+
 var Ripplify = {
     bind(el, binding) {
         var value = binding.value || {}
@@ -38,8 +40,7 @@ var Ripplify = {
             destroy(el)
             init(el, binding)
         }
-    }
-    
+    }    
 }
 
 function destroy(el) {
@@ -165,14 +166,10 @@ function setStyles({ rippleContainer, ripple }, el, event, { isUnbounded, durati
         borderBottomRightRadius
     } = calcRippleSurfaceDimensions(el, event, isUnbounded)
 
+    rippleContainer.className = 'vue-ripplify-container'
+    ripple.className = 'vue-ripplify-ripple'
+
     rippleContainer.style.cssText = `
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        overflow: hidden;
         border-top-left-radius: ${borderTopLeftRadius};
         border-top-right-radius: ${borderTopRightRadius};
         border-bottom-left-radius: ${borderBottomLeftRadius};
@@ -184,15 +181,15 @@ function setStyles({ rippleContainer, ripple }, el, event, { isUnbounded, durati
         left: ${left};
         width: ${width};
         height: ${height};
-        transition:
-            transform ${duration}ms cubic-bezier(0.4, 0, 0.2, 1),
-            opacity ${DEACTIVATION_MS}ms linear;
-        border-radius: 50%;
-        pointer-events: none;
-        position: relative;
         z-index: ${zIndex};
         background-color: ${color};
-        transform: scale(${scale})
+        transition: opacity ${DEACTIVATION_MS}ms linear;
+        transition: -webkit-transform ${duration}ms cubic-bezier(0.4, 0, 0.2, 1);
+        transition: -ms-transform ${duration}ms cubic-bezier(0.4, 0, 0.2, 1);  
+        transition: transform ${duration}ms cubic-bezier(0.4, 0, 0.2, 1);
+        -webkit-transform: scale(${scale});
+        -ms-transform: scale(${scale});
+        transform: scale(${scale});
     `
 }
 
@@ -286,7 +283,7 @@ function animate(rippleSurface, state, duration) {
 
     function scale() {
         if (ripple) {
-            ripple.style.transform = 'scale(1)'
+            ripple.classList.add('vue-ripplify-full-scale')
 
             state.timeouts.fade = setTimeout(() => {
                 state.isAnimationInProgress = false

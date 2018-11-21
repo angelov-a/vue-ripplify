@@ -1,14 +1,13 @@
 {
   "name": "vue-ripplify",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A configurable directive-based Ripple effect for Vue",
   "main": "dist/vue-ripplify.umd.js",
   "module": "src/vue-ripplify.js",
   "unpkg": "dist/vue-ripplify.min.js",
   "scripts": {
-    "build": "npm run build:umd & npm run build:es & npm run build:unpkg",
+    "build": "npm run build:umd & npm run build:unpkg",
     "build:umd": "rollup --config build/rollup.config.js --format umd --file dist/vue-ripplify.umd.js",
-    "build:es": "rollup --config build/rollup.config.js --format es --file dist/vue-ripplify.esm.js",
     "build:unpkg": "rollup --config build/rollup.config.js --format iife --file dist/vue-ripplify.min.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -29,7 +28,9 @@
   },
   "homepage": "https://github.com/angelov-a/vue-ripplify#readme",
   "devDependencies": {
+    "autoprefixer": "^9.3.1",
     "rollup": "^0.67.3",
+    "rollup-plugin-postcss": "^1.6.3",
     "rollup-plugin-terser": "^3.0.0"
   }
 }

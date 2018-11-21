@@ -8,7 +8,6 @@ const DURATION_MS = 225
 
 export {
     DURATION_MS,
-    DEACTIVATION_TIMEOUT_MS,
     DEACTIVATION_MS,
     COLOR,
     Z_INDEX,

@@ -1,0 +1,35 @@
+{
+  "name": "vue-ripplify",
+  "version": "1.0.0",
+  "description": "A configurable directive-based Ripple effect for Vue",
+  "main": "dist/vue-ripplify.umd.js",
+  "module": "dist/vue-ripplify.esm.js",
+  "unpkg": "dist/vue-ripplify.min.js",
+  "scripts": {
+    "build": "npm run build:umd & npm run build:es & npm run build:unpkg",
+    "build:umd": "rollup --config build/rollup.config.js --format umd --file dist/vue-ripplify.umd.js",
+    "build:es": "rollup --config build/rollup.config.js --format es --file dist/vue-ripplify.esm.js",
+    "build:unpkg": "rollup --config build/rollup.config.js --format iife --file dist/vue-ripplify.min.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angelov-a/vue-ripplify.git"
+  },
+  "keywords": [
+    "vue",
+    "material design",
+    "ripple",
+    "directive"
+  ],
+  "author": "Alexander Angelov <angelov.alex.npm@gmail.com> (https://github.com/angelov-a)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/angelov-a/vue-ripplify/issues"
+  },
+  "homepage": "https://github.com/angelov-a/vue-ripplify#readme",
+  "devDependencies": {
+    "rollup": "^0.67.3",
+    "rollup-plugin-terser": "^3.0.0"
+  }
+}

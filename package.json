@@ -1,9 +1,9 @@
 {
   "name": "vue-ripplify",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A configurable directive-based Ripple effect for Vue",
   "main": "dist/vue-ripplify.umd.js",
-  "module": "dist/vue-ripplify.esm.js",
+  "module": "src/vue-ripplify.js",
   "unpkg": "dist/vue-ripplify.min.js",
   "scripts": {
     "build": "npm run build:umd & npm run build:es & npm run build:unpkg",

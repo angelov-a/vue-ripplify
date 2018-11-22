@@ -1,6 +1,6 @@
 {
   "name": "vue-ripplify",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A configurable directive-based Ripple effect for Vue",
   "main": "dist/vue-ripplify.umd.js",
   "module": "src/vue-ripplify.js",

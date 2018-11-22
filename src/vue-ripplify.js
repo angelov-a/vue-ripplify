@@ -183,12 +183,9 @@ function setStyles({ rippleContainer, ripple }, el, event, { isUnbounded, durati
         height: ${height};
         z-index: ${zIndex};
         background-color: ${color};
-        transition: opacity ${DEACTIVATION_MS}ms linear;
-        transition: -webkit-transform ${duration}ms cubic-bezier(0.4, 0, 0.2, 1);
-        transition: -ms-transform ${duration}ms cubic-bezier(0.4, 0, 0.2, 1);  
-        transition: transform ${duration}ms cubic-bezier(0.4, 0, 0.2, 1);
-        -webkit-transform: scale(${scale});
-        -ms-transform: scale(${scale});
+        transition:
+            opacity ${DEACTIVATION_MS}ms linear,
+            transform ${duration}ms cubic-bezier(0.4, 0, 0.2, 1);
         transform: scale(${scale});
     `
 }
@@ -306,6 +303,7 @@ function fadeRipple(rippleSurface, state) {
     // before fading and destroying the ripple
     if (!state.isAnimationInProgress && state.hasInteractionEnded) {
         requestAnimationFrame(fade)
+
         state.timeouts.destroy = setTimeout(() => {
             state.hasInteractionEnded = false
             destroyRippleSurface(rippleSurface)

@@ -192,31 +192,57 @@ function setStyles({ rippleContainer, ripple }, el, event, { isUnbounded, durati
 }
 
 function calcRippleSurfaceDimensions(el, event, isUnbounded) {
+    var rippleDimensions = (
+        isUnbounded
+        ? calcUnbounded()
+        : calcBounded(el, event)
+    )
+
+    var style = window.getComputedStyle(el)
+
+    return {
+        ...rippleDimensions,
+
+        borderTopLeftRadius: style.borderTopLeftRadius,
+        borderTopRightRadius: style.borderTopRightRadius,
+        borderBottomLeftRadius: style.borderBottomLeftRadius,
+        borderBottomRightRadius: style.borderBottomRightRadius
+    }
+
+}
+
+function calcUnbounded() {
+    return {
+        width: '102%',
+        height: '102%',
+        left: '-1%',
+        top: '-1%',
+        scale: SCALE_INITIAL
+    }
+}
+
+function calcBounded(el, event) {
     var rect                = el.getBoundingClientRect(),
         rectLeft            = rect.left,
         rectTop             = rect.top,
         elWidth             = el.offsetWidth,
         elHeight            = el.offsetHeight,
         widthToHeightRatio  = elWidth / elHeight,
-        eventX              = isUnbounded ? 50 : (100 * (event.clientX - rectLeft)) / elWidth,
-        eventY              = isUnbounded ? 50 : (100 * (event.clientY - rectTop)) / elHeight,
+        eventX              = (100 * (event.clientX - rectLeft)) / elWidth,
+        eventY              = (100 * (event.clientY - rectTop)) / elHeight,
         eventYRelavite      = eventY / widthToHeightRatio,
         maxX                = Math.max(eventX, 100 - eventX),
         maxY                = Math.max(eventYRelavite, 100 / widthToHeightRatio - eventYRelavite),
-        radius              = Math.sqrt((maxX * maxX) + (maxY * maxY)),
-        style               = window.getComputedStyle(el),
+        radius              = Math.sqrt(Math.pow(maxX, 2) + Math.pow(maxY, 2)),
+        diameter            = radius * 2,
         maxDim              = Math.max(100, (100 * elHeight) / elWidth)
 
     return {
-        width: radius * 2 + "%",
-        height: radius * 2 * widthToHeightRatio + "%",
+        width: diameter + "%",
+        height: diameter * widthToHeightRatio + "%",
         left: eventX - radius + "%",
         top: eventY - radius * widthToHeightRatio + "%",
-        scale: (SCALE_INITIAL * maxDim) / (radius * 2),
-        borderTopLeftRadius: style.borderTopLeftRadius,
-        borderTopRightRadius: style.borderTopRightRadius,
-        borderBottomLeftRadius: style.borderBottomLeftRadius,
-        borderBottomRightRadius: style.borderBottomRightRadius
+        scale: (SCALE_INITIAL * maxDim) / diameter
     }
 }
 

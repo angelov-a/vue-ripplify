@@ -9,6 +9,7 @@ Notable features:
 * Ripple resizes correctly if target size changes mid-effect
 * Unbounded option
 
+[Live demo](https://angelov-a.github.io/vue-ripplify/)
 
 ## Installation
 

@@ -32,11 +32,12 @@ var Ripplify = {
                 destroy(el)
             }
         } else if (
-            !value.isDisabled &&
-            value.isUnbounded !== oldValue.isUnbounded ||
-            value.duration !== oldValue.duration ||
-            value.color !== oldValue.color ||
-            value.zIndex !== oldValue.zIndex
+            !value.isDisabled && (
+                value.isUnbounded !== oldValue.isUnbounded ||
+                value.duration !== oldValue.duration ||
+                value.color !== oldValue.color ||
+                value.zIndex !== oldValue.zIndex
+            )
         ) {
             destroy(el)
             init(el, binding)

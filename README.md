@@ -21,12 +21,20 @@ npm install vue-ripplify --save
 ## Usage
 
 ```javascript
+// in builds
 import VueRipplify from 'vue-ripplify'
 
 Vue.directive('ripple', VueRipplify)
 ```
+
 ```html
-<div v-ripple class="button">This button ripples</div>
+<!-- when using a <script> tag -->
+<script type="text/javascript" src="https://unpkg.com/vue-ripplify"></script>
+```
+
+```html
+<!-- application -->
+<div v-ripple class="button">A button with ripple</div>
 ```
 
 
@@ -59,7 +67,7 @@ vue-ripplify will reconfigure the effect when either of `this.isRippleDisabled` 
 
 ## Global Options
 
-Setting default values can be done thus:
+Setting default values can be set thus:
 
 ```js
 import Ripplify from 'vue-ripplify'

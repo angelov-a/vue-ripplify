@@ -61,7 +61,7 @@ function init(
         // Ripple defaults
         value: {
             isUnbounded = Ripplify.isUnbounded || false,
-            duration = Ripplify.duration || DURATION_MS,
+            duration = ensurePositiveNumber(Ripplify.duration) || DURATION_MS,
             color = Ripplify.color || COLOR,
             zIndex = Ripplify.zIndex || Z_INDEX
         } = {},
@@ -85,6 +85,15 @@ function init(
     }
 
     attachActivationListeners(el, settings, state)
+}
+
+// returns null if the value is not a number or is not positive
+function ensurePositiveNumber(val) {
+    return (
+        isNaN(val) || val <= 0
+        ? null
+        : val
+    )
 }
 
 // Listen for user interactions

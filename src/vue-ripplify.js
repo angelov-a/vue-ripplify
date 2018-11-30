@@ -35,6 +35,7 @@ var Ripplify = {
             !value.isDisabled && (
                 value.isUnbounded !== oldValue.isUnbounded ||
                 value.duration !== oldValue.duration ||
+                value.fadeDuration !== oldValue.fadeDuration ||
                 value.color !== oldValue.color ||
                 value.zIndex !== oldValue.zIndex
             )
@@ -62,6 +63,7 @@ function init(
         value: {
             isUnbounded = Ripplify.isUnbounded || false,
             duration = ensurePositiveNumber(Ripplify.duration) || DURATION_MS,
+            fadeDuration = ensurePositiveNumber(Ripplify.fadeDuration) || DEACTIVATION_MS,
             color = Ripplify.color || COLOR,
             zIndex = Ripplify.zIndex || Z_INDEX
         } = {},
@@ -71,6 +73,7 @@ function init(
     var settings = {
         isUnbounded,
         duration,
+        fadeDuration,
         color,
         zIndex,
         activationEventTypes
@@ -97,7 +100,7 @@ function ensurePositiveNumber(val) {
 }
 
 // Listen for user interactions
-function attachActivationListeners(el, { isUnbounded, duration, color, zIndex, activationEventTypes }, state) {
+function attachActivationListeners(el, { isUnbounded, duration, fadeDuration, color, zIndex, activationEventTypes }, state) {
     if (!Array.isArray(activationEventTypes)) {
         activationEventTypes = [ activationEventTypes ]
     }
@@ -106,7 +109,7 @@ function attachActivationListeners(el, { isUnbounded, duration, color, zIndex, a
 
     activationEventTypes.forEach(type => {
         el.ripplifyActivationListeners[type] = function (event) {
-            doRipple(event, el, { isUnbounded, duration, color, zIndex }, state);
+            doRipple(event, el, { isUnbounded, duration, fadeDuration, color, zIndex }, state);
         }
 
         el.addEventListener(type, el.ripplifyActivationListeners[type])
@@ -140,12 +143,12 @@ function doRipple(event, el, settings, state) {
     
     setElPositionToRelative(state)
     
-    attachDeactivationListeners(rippleSurface, state)
+    attachDeactivationListeners(rippleSurface, state, settings.fadeDuration)
 
     // Requests an animation frame which sets the ripple's
     // tranform scale to full size (=== 1).
     // Timeouts are set to fade and destroy the rippleSurface
-    animate(rippleSurface, state, settings.duration)
+    animate(rippleSurface, state, settings.duration, settings.fadeDuration)
 }
 
 function prepare(event, el, settings) {
@@ -164,7 +167,7 @@ function createRippleSurface() {
     return { rippleContainer, ripple }
 }
 
-function setStyles({ rippleContainer, ripple }, el, event, { isUnbounded, duration, color, zIndex }) {
+function setStyles({ rippleContainer, ripple }, el, event, { isUnbounded, duration, fadeDuration, color, zIndex }) {
     var {
         width,
         height,
@@ -195,7 +198,7 @@ function setStyles({ rippleContainer, ripple }, el, event, { isUnbounded, durati
         z-index: ${zIndex};
         background-color: ${color};
         transition:
-            opacity ${DEACTIVATION_MS}ms linear,
+            opacity ${fadeDuration}ms linear,
             transform ${duration}ms cubic-bezier(0.4, 0, 0.2, 1);
         transform: scale(${scale});
     `
@@ -290,7 +293,7 @@ function restoreElOriginalPosition(state) {
 // Listens to deactivation events like 'mouseup'.
 // The ripple surface will not be faded and destroyed unless
 // the animation has ended AND a deactivation event has occurred
-function attachDeactivationListeners(rippleSurface, state) {
+function attachDeactivationListeners(rippleSurface, state, fadeDuration) {
     document.body.ripplifyDeactivationListeners = {}
 
     DEACTIVATION_EVENT_TYPES.forEach(type => {
@@ -299,7 +302,7 @@ function attachDeactivationListeners(rippleSurface, state) {
 
             dettachDeactivationListeners()
 
-            fadeRipple(rippleSurface, state)
+            fadeRipple(rippleSurface, state, fadeDuration)
         }
 
         document.body.addEventListener(type, document.body.ripplifyDeactivationListeners[type])
@@ -312,7 +315,7 @@ function dettachDeactivationListeners() {
     })
 }
 
-function animate(rippleSurface, state, duration) {
+function animate(rippleSurface, state, duration, fadeDuration) {
     var ripple = rippleSurface.ripple
 
     function scale() {
@@ -321,7 +324,7 @@ function animate(rippleSurface, state, duration) {
 
             state.timeouts.fade = setTimeout(() => {
                 state.isAnimationInProgress = false
-                fadeRipple(rippleSurface, state)
+                fadeRipple(rippleSurface, state, fadeDuration)
             }, duration)
         }
     }
@@ -329,7 +332,7 @@ function animate(rippleSurface, state, duration) {
     requestAnimationFrame(scale)
 }
 
-function fadeRipple(rippleSurface, state) {
+function fadeRipple(rippleSurface, state, fadeDuration) {
     var ripple = rippleSurface.ripple
 
     function fade() {
@@ -345,7 +348,7 @@ function fadeRipple(rippleSurface, state) {
             state.hasInteractionEnded = false
             destroyRippleSurface(rippleSurface)
             restoreElOriginalPosition(state)
-        }, DEACTIVATION_MS)
+        }, fadeDuration)
     }
 }
 

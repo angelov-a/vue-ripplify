@@ -67,7 +67,7 @@ vue-ripplify will reconfigure the effect when either of `this.isRippleDisabled` 
 
 ## Global Options
 
-Setting default values can be set thus:
+Default values can be set thus:
 
 ```js
 import Ripplify from 'vue-ripplify'
